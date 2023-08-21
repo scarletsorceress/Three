@@ -20,7 +20,7 @@ canvas {
   padding: 5px;
   font-family: Monospace;
   font-size: 13px;
-  z-index: 100;
+  z-index: 2;
   display:block;
   background-color: rgba(116, 189, 223, 0.356);
 }
@@ -35,7 +35,7 @@ canvas {
   padding: 5px;
   font-family: Monospace;
   font-size: 13px;
-  z-index: 100;
+  z-index: 2;
   display:block;
   background-color: rgba(116, 189, 223, 0);
 }
@@ -50,7 +50,7 @@ canvas {
   padding: 5px;
   font-family: Monospace;
   font-size: 15px;
-  z-index: 100;
+  z-index: 2;
   display:flex;
   background-color: rgba(116, 189, 223, 0);
 }
@@ -65,4 +65,23 @@ canvas {
 
 .name {
   color:red;
+}
+
+.projects{
+  position: absolute;
+  top: 40%;
+  left: 25%;
+  width: 50%;
+  text-align: center;
+  color: rgb(5, 0, 0);
+  padding: 5px;
+  font-family: Monospace;
+  font-size: 20px;
+  z-index: 1;
+  display:block;
+  background-color: rgba(116, 189, 223, 0.356);
+}
+
+hr {
+  width:60%
 }

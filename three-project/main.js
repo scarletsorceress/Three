@@ -4,19 +4,36 @@ import * as THREE from 'three';
 			import Stats from 'three/addons/libs/stats.module.js';
 
 			import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
+			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
+			const checkbox = document.getElementById('toggle-ui');
+          	const container = document.querySelector('.container');
+          	const aboutme = document.getElementById('aboutme');
+          	const projects = document.querySelector('.projects');
+          	checkbox.addEventListener('change', function() {
+            const display = this.checked ? '' : 'none';
+            container.style.display = display;
+            aboutme.style.display = display;
+            projects.style.display = display;
+		  	controls.movementSpeed = this.checked ? 0 : 750; // Set movement speed to 0 when UI is hidden
+		  	controls.lookSpeed = this.checked ? 0 : 0.05; // Set look speed to 0 when UI is hidden 
+
+			});
+			
 			let camera, controls, scene, renderer, stats;
 
 			let mesh, geometry, material, clock;
 
 			const worldWidth = 128, worldDepth = 128;
 
+			let shark; // Add this at the top with other let declarations
+
 			init();
 			animate();
 
 			function init() {
 
-				camera = new THREE.PerspectiveCamera( 60, window.innerWidth / window.innerHeight, 1, 20000 );
+				camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 20000 );
 				camera.position.y = 200;
 
 				clock = new THREE.Clock();
@@ -47,15 +64,28 @@ import * as THREE from 'three';
 				mesh = new THREE.Mesh( geometry, material );
 				scene.add( mesh );
 
+				// Add a spotlight above the shark position
+				const spotLight = new THREE.SpotLight(0xffffff, 2, 1000, Math.PI / 4, 0.5, 1);
+				spotLight.position.set(0, 300, 0); // Directly above the shark's initial position
+				spotLight.target.position.set(0, 40, 0); // Point at the shark
+				scene.add(spotLight);
+				scene.add(spotLight.target);
+				
+				// Load shark model
+				const loader = new GLTFLoader();
+				loader.load('realistic_shark.glb', function(gltf) {
+					shark = gltf.scene;
+					shark.position.set(0, 40, 0); // Adjust position as needed
+					shark.scale.set(100, 100, 100); // Adjust scale as needed
+					scene.add(shark);
+				});
+
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
 
 				controls = new FirstPersonControls( camera, renderer.domElement );
-
-				controls.movementSpeed = 750;
-				controls.lookSpeed = 0.05;
 
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
@@ -101,6 +131,7 @@ import * as THREE from 'three';
 				}
 
 				position.needsUpdate = true;
+				mesh.geometry.computeVertexNormals();
 
 				controls.update( delta );
 				renderer.render( scene, camera );

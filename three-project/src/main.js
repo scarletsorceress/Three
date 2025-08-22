@@ -1,13 +1,18 @@
-import './style.css';
+import '../style.css';
 import * as THREE from 'three';
 
-			import Stats from 'three/addons/libs/stats.module.js';
+import Stats from 'three/addons/libs/stats.module.js';
 
-			import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
-			import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { FirstPersonControls } from 'three/addons/controls/FirstPersonControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+import { World } from './world/World.js';
+
+const container = document.querySelector('.container');
+
+const world = new World(container);
 
 			const checkbox = document.getElementById('toggle-ui');
-          	const container = document.querySelector('.container');
           	const aboutme = document.getElementById('aboutme');
           	const projects = document.querySelector('.projects');
           	checkbox.addEventListener('change', function() {
@@ -33,7 +38,7 @@ import * as THREE from 'three';
 
 			function init() {
 
-				camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 20000 );
+				camera = new THREE.PerspectiveCamera( 120, window.innerWidth / window.innerHeight, 1, 2000 );
 				camera.position.y = 200;
 
 				clock = new THREE.Clock();
@@ -75,6 +80,8 @@ import * as THREE from 'three';
 				const loader = new GLTFLoader();
 				loader.load('realistic_shark.glb', function(gltf) {
 					shark = gltf.scene;
+					//adding texture to the shark
+					const sharkTexture = new THREE.TextureLoader().load('realistic_shark.glb');
 					shark.position.set(0, 40, 0); // Adjust position as needed
 					shark.scale.set(100, 100, 100); // Adjust scale as needed
 					scene.add(shark);
@@ -131,9 +138,9 @@ import * as THREE from 'three';
 				}
 
 				position.needsUpdate = true;
-				mesh.geometry.computeVertexNormals();
 
 				controls.update( delta );
 				renderer.render( scene, camera );
+
 
 			}
